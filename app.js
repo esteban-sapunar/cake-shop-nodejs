@@ -8,6 +8,7 @@ const passport = require('passport');
 const User = require('./models/user');
 const session = require('express-session');
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
 
 //Require Routes
 const indexRouter = require('./routes/index');
@@ -27,14 +28,14 @@ db.once('open', () => {
 });
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser()); 
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(methodOverride('_method'));
 //configure passport and sessions
 app.use(session({
   secret: 'hang ten dude',
