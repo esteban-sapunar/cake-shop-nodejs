@@ -1,10 +1,34 @@
 <h1>Edit Post</h1>
 
-<form action="/posts/<%=post.id%>?_method=PUT" method="POST" style="display:grid;width: 20%;margin: auto;">
+<form action="/posts/<%=post.id%>?_method=PUT" method="POST" id="postEditForm" enctype="multipart/form-data" style="display:grid;width: 20%;margin: auto;">
 	<input type="text" name="post[title]" placeholder="Title" value="<%= post.title %>">
 	<input type="text" name="post[price]" placeholder="Price" value="<%= post.price %>">
+	<div>
+		<% post.images.forEach(function(image, i) { %>
+			<img src="<%= image.url %>" alt="cake image" width="100px">
+			<label for="image<%= i %>">Delete?</label>
+			<input type="checkbox" name="deleteImage" class="imageDeleteBox" id="image<%= i %>" value="<%= image.public_id %>">
+		<% }); %>
+	</div>
+	<div>
+		<input type="file" id="imageUpload" accept="image/*" name="images" multiple="true">
+	</div>
 	<textarea name="post[description]" id="" cols="30" rows="10" placeholder="Description"><%= post.description %></textarea>
 	<input type="text" name="post[location]" placeholder="Location" value="<%= post.location %>">
 
 	<input type="submit">
 </form>
+
+<script>
+	let postEditForm = document.getElementById('postEditForm');
+	postEditForm.addEventListener('submit', function(event) {
+		let imageUpload = document.getElementById('imageUpload');
+		let uploadNumber = imageUpload.files.length;
+		let images = document.querySelectorAll('.imageDeleteBox').length;
+		let imagesDelete = document.querySelectorAll('.imageDeleteBox:checked').length;
+		if(uploadNumber + images - imagesDelete > 4){
+			event.preventDefault();
+			alert("You have to delete "+(uploadNumber + images - imagesDelete -4)+" images.");
+		}
+	});
+</script>
