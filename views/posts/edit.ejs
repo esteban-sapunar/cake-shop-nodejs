@@ -7,7 +7,7 @@
 		<% post.images.forEach(function(image, i) { %>
 			<img src="<%= image.url %>" alt="cake image" width="100px">
 			<label for="image<%= i %>">Delete?</label>
-			<input type="checkbox" name="deleteImage" class="imageDeleteBox" id="image<%= i %>" value="<%= image.public_id %>">
+			<input type="checkbox" name="deleteImages[]" class="imageDeleteBox" id="image<%= i %>" value="<%= image.public_id %>">
 		<% }); %>
 	</div>
 	<div>
@@ -28,7 +28,7 @@
 		let imagesDelete = document.querySelectorAll('.imageDeleteBox:checked').length;
 		if(uploadNumber + images - imagesDelete > 4){
 			event.preventDefault();
-			alert("You have to delete "+(uploadNumber + images - imagesDelete -4)+" images.");
+			alert("You have to delete "+(uploadNumber + images - imagesDelete -4)+"(more) images.");
 		}
 	});
 </script>
