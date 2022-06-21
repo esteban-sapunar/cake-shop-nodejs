@@ -10,11 +10,13 @@ const User = require('./models/user');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 
 //Require Routes
 const indexRouter = require('./routes/index');
 const postsRouter = require('./routes/posts');
 const reviewsRouter = require('./routes/reviews');
+
 
 const app = express();
 
@@ -30,6 +32,8 @@ db.once('open', () => {
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+// set public asset directory
+app.use(express.static('public'));
 
 app.use(logger('dev'));
 app.use(express.json());

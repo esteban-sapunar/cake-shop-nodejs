@@ -1,18 +1,81 @@
-<h1><%= post.title %></h1>
-<div>Price: <%= post.price %></div>
-<div><%= post.description %></div>
-<div>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css' rel='stylesheet' />
+<style>
+	body {
+		margin: 0;
+		padding: 0;
+	}
+
+	#map {
+		width: 400px;
+		height: 300px;
+		margin: auto;
+	}
+  	.marker {
+		background-image: url('/images/mapbox-icon.png');
+		background-size: cover;
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		cursor: pointer;
+	}
+	.mapboxgl-popup {
+	  max-width: 200px;
+	}
+
+	.mapboxgl-popup-content {
+	  text-align: center;
+	  font-family: 'Open Sans', sans-serif;
+	}
+
+
+</style>
+
+<h1 style="display: block; margin: auto; text-align: center;"><%= post.title %></h1>
+<div style="display: block; margin: auto;width: 400px;"><p style="width: 100%;text-align: center;">Price: <%= post.price %></p></div>
+<div style="display: block; margin: auto;width: 400px;"><p style="width: 100%;text-align: center;"><%= post.description %></p></div>
+<div style="display: block; margin: auto;width: 400px;">
 	<% post.images.forEach(function(image) { %>
 		<img src="<%= image.url %>" alt="cake image" width="200px">
 	<% }); %>
 </div>
-<div>
+<div id='map'></div>
+<div style="display: block; margin: auto;width: 400px;">
 	<a href="/posts/<%= post.id %>/edit">
 	<button>Edit</button> 
 	</a>
 </div>
-<div>
+<div style="display: block; margin: auto;width: 400px;">
 	<form action="/posts/<%= post.id %>?_method=DELETE" method="POST">
 		<input type="submit" value="Delete">
 	</form>
 </div>
+
+<script>
+const post = <%- JSON.stringify(post)%>;
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2FwdSIsImEiOiJjbDQ1MDdjbDQwaGFtM2p0NndqeHcwM3UxIn0.cL23Ysp8Hlfu2bDffI_dCw';
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/light-v10',
+  center: post.coordinates,
+  zoom: 6
+});
+// add markers to map
+  // create a HTML element for each feature
+  const el = document.createElement('div');
+  el.className = 'marker';
+
+  // make a marker for each feature and add to the map
+  new mapboxgl.Marker(el)
+  .setLngLat(post.coordinates)
+  .setPopup(
+    new mapboxgl.Popup({ offset: 25 }) // add popups
+      .setHTML(
+        `<h3>${post.title}</h3><p>${post.location}</p>`
+      )
+  )
+  .addTo(map);
+
+</script>
